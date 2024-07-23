@@ -4,6 +4,8 @@ using FluentStorage;
 using Gotenberg.Sharp.API.Client;
 using Gotenberg.Sharp.API.Client.Domain.Settings;
 using Gotenberg.Sharp.API.Client.Extensions;
+using Microsoft.Extensions.Options;
+using PescTranscriptConverter.Api.Config;
 using PescTranscriptConverter.Api.Services;
 
 namespace PescTranscriptConverter.Api;
@@ -46,21 +48,23 @@ public static partial class ProgramExtensions
     {
         builder.Services.AddKeyedSingleton("CollegeTranscript", (p, _) =>
         {
+            var opts = p.GetRequiredService<IOptions<CdlAssetsOptions>>().Value;
             var transform = new XslCompiledTransform(true);
             XmlUrlResolver resolver = new XmlUrlResolver();
             XsltSettings settings = new XsltSettings(true, false);
 
-            transform.Load("./cdl-assets/CollegeTranscript.xsl", settings, new XmlUrlResolver());
+            transform.Load(Path.Combine(opts.RootDirectory, "CollegeTranscript.xsl"), settings, new XmlUrlResolver());
             return transform;
         });
 
         builder.Services.AddKeyedSingleton("HighSchoolTranscript", (p, _) =>
         {
+            var opts = p.GetRequiredService<IOptions<CdlAssetsOptions>>().Value;
             var transform = new XslCompiledTransform(true);
             XmlUrlResolver resolver = new XmlUrlResolver();
             XsltSettings settings = new XsltSettings(true, false);
 
-            transform.Load("./cdl-assets/HighSchoolTranscript.xsl", settings, new XmlUrlResolver());
+            transform.Load(Path.Combine(opts.RootDirectory, "HighSchoolTranscript.xsl"), settings, new XmlUrlResolver());
             return transform;
         });
 
@@ -73,7 +77,19 @@ public static partial class ProgramExtensions
             builder.Services.AddGotenbergSharpClient();
         }
 
-        builder.Services.AddSingleton<FetchPdfAssets.Footer>(s => () => File.ReadAllTextAsync("./cdl-assets/pdf/footer.html"));
-        builder.Services.AddSingleton<FetchPdfAssets.Header>(s => () => File.ReadAllTextAsync("./cdl-assets/pdf/header.html"));
+        var cdlAssetsConfig = builder.Configuration.GetSection(CdlAssetsOptions.SectionName);
+        builder.Services.AddOptions<CdlAssetsOptions>()
+            .Bind(cdlAssetsConfig);
+
+        builder.Services.AddSingleton<FetchCdlAssets.PdfFooter>(s => () =>
+        {
+            var opts = s.GetRequiredService<IOptions<CdlAssetsOptions>>().Value;
+            return File.ReadAllTextAsync(Path.Combine(opts.RootDirectory, opts.PdfFooter));
+        });
+        builder.Services.AddSingleton<FetchCdlAssets.PdfHeader>(s => () =>
+        {
+            var opts = s.GetRequiredService<IOptions<CdlAssetsOptions>>().Value;
+            return File.ReadAllTextAsync(Path.Combine(opts.RootDirectory, opts.PdfHeader));
+        });
     }
 }

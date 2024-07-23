@@ -32,8 +32,8 @@ public class HighSchoolTranscriptToPdf : Endpoint<HighSchoolTranscriptToPdfReque
             Xslt = "HighSchoolTranscript"
         }.ExecuteAsync(ct);
 
-        var footerHtml = await Resolve<FetchPdfAssets.Footer>().Invoke();
-        var headerHtml = await Resolve<FetchPdfAssets.Header>().Invoke();
+        var footerHtml = await Resolve<FetchCdlAssets.PdfFooter>().Invoke();
+        var headerHtml = await Resolve<FetchCdlAssets.PdfHeader>().Invoke();
 
         var builder = new HtmlRequestBuilder()
             .AddDocument(doc =>

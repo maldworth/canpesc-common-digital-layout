@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="cdl-assets\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\..\assets\**\*.*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="cdl-assets\*">
+    <None Update="..\..\..\assets\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

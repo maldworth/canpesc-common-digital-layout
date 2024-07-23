@@ -13,8 +13,8 @@ public class WebTests
         await app.StartAsync();
 
         // Act
-        var httpClient = app.CreateHttpClient("webfrontend");
-        var response = await httpClient.GetAsync("/");
+        var httpClient = app.CreateHttpClient("api");
+        var response = await httpClient.GetAsync("/swagger");
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

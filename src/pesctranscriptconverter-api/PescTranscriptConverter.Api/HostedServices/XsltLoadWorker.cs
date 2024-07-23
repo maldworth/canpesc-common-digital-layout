@@ -1,11 +1,14 @@
 ﻿using System.Xml.Xsl;
 using FastEndpoints;
 using FluentStorage.Blobs;
+using Microsoft.Extensions.Options;
+using PescTranscriptConverter.Api.Config;
 
 namespace PescTranscriptConverter.Api.HostedServices;
 
 internal sealed class XsltLoadWorker(
     IServiceProvider serviceProvider,
+    IOptions<CdlAssetsOptions> options,
     ILogger<XsltLoadWorker> logger) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -30,16 +33,16 @@ internal sealed class XsltLoadWorker(
         }
 
         var blobs = await blobStorage.ListAsync(recurse: true, cancellationToken: cancellationToken);
-
         foreach (var blob in blobs)
         {
+            var blobPath = Path.Combine(options.Value.RootDirectory, blob.FullPath);
             if (blob.IsFolder)
             {
-                Directory.CreateDirectory($"./cdl-assets{blob.FullPath}");
+                Directory.CreateDirectory(blobPath);
             }
             else if (blob.IsFile)
             {
-                await blobStorage.ReadToFileAsync(blob.FullPath, $"./cdl-assets{blob.FullPath}", cancellationToken);
+                await blobStorage.ReadToFileAsync(blob.FullPath, blobPath, cancellationToken);
             }
         }
     }
