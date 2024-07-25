@@ -21,7 +21,7 @@ public class CollegeTranscriptToPdfTests : IAsyncLifetime
         return Task.CompletedTask;
     }
 
-    [Theory(Skip = "This will fail to hit gotenberg instance. I've raised an issue here: https://github.com/dotnet/aspire/issues/5076")]
+    [Theory]
     [InlineData("Canada.Ontario.College.CollegeTranscript.xml", "en-CA")]
     [InlineData("Canada.Ontario.University.UniversityTranscript.xml", "en-CA")]
     [InlineData("Canada.Ontario.University.UniversityTranscript2.xml", "en-CA")]
