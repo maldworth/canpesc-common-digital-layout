@@ -69,3 +69,8 @@ await app.GenerateClientsAndExitAsync(
     );
 
 app.Run();
+
+/// <summary>
+/// Make the implicit Program class public so test projects can access it
+/// </summary>
+public partial class Program { }
