@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FastEndpoints;
+using FastEndpoints.ClientGen;
 using FastEndpoints.Swagger;
 using PescTranscriptConverter.Api;
 using PescTranscriptConverter.Api.HostedServices;
@@ -20,6 +21,7 @@ builder.Services.AddFastEndpoints()
     {
         o.DocumentSettings = s =>
         {
+            s.DocumentName = "latest";
             s.Title = "PESC Transcript Converter API";
             s.Version = "v1";
         };
@@ -51,4 +53,24 @@ app.UseFastEndpoints(c =>
 });
 app.UseSwaggerGen();
 
+await app.GenerateClientsAndExitAsync(
+                    "latest", app.Configuration["NSwagGeneratorOutputPath"] ?? Directory.GetCurrentDirectory(),
+                    csSettings: c =>
+                    {
+                        c.ClassName = "PescTranscriptConverterClient";
+                        c.CSharpGeneratorSettings.Namespace = "PescTranscriptConverter.Tests";
+                        c.CSharpGeneratorSettings.JsonLibrary = NJsonSchema.CodeGeneration.CSharp.CSharpJsonLibrary.SystemTextJson;
+
+                        c.GenerateClientInterfaces = true;
+                        c.GenerateOptionalParameters = true;
+                        c.UseBaseUrl = false;
+                    },
+                    tsSettings: null
+                );
+
 app.Run();
+
+/// <summary>
+/// Make the implicit Program class public so test projects can access it
+/// </summary>
+public partial class Program { }

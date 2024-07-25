@@ -2,17 +2,19 @@
 using Gotenberg.Sharp.API.Client;
 using Gotenberg.Sharp.API.Client.Domain.Builders;
 using Gotenberg.Sharp.API.Client.Domain.Builders.Faceted;
+using Microsoft.AspNetCore.Mvc;
 using PescTranscriptConverter.Api.Commands;
 using PescTranscriptConverter.Api.Services;
 
 namespace PescTranscriptConverter.Api.Endpoints;
 
-public class CollegeTranscriptToPdf : Endpoint<CollegeTranscriptToPdfRequest, CollegeTranscriptToPdfResponse>
+public class CollegeTranscriptToPdf : Endpoint<CollegeTranscriptToPdfRequest>
 {
     public override void Configure()
     {
         Post("/college-transcript/to-pdf");
         Options(o => o.WithTags("College Transcripts"));
+        Description(d => d.Produces(200, typeof(FileResult), "application/pdf"));
         AllowAnonymous();
     }
 
@@ -59,9 +61,4 @@ public class CollegeTranscriptToPdfRequest
 {
     public string Pesc { get; set; } = default!;
     public string Locale { get; set; } = default!;
-}
-
-public class CollegeTranscriptToPdfResponse
-{
-    public string Html { get; set; } = default!;
 }
