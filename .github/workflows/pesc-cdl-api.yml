@@ -1,0 +1,73 @@
+name: pesc-cdl-api
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+    paths:
+    - .github/workflows/pesc-cdl-api.yml
+    - src/pesctranscriptconverter-api/**
+    - assets/cdl/**
+
+  pull_request:
+    branches:
+    - main
+
+    paths:
+    - .github/workflows/pesc-cdl-api.yml
+    - src/pesctranscriptconverter-api/**
+    - assets/cdl/**
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/pesc-cdl-api
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@v4
+
+    - name: 'Set up .NET Core'
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: 'Restore dependencies'
+      run: dotnet restore src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln
+
+    - name: 'Build'
+      run: dotnet build src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln
+
+    - name: 'Test'
+      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests.csproj
+
+  # docker_publish:
+  #   if: github.event_name != 'pull_request'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: 'Checkout Github Action'
+  #     uses: actions/checkout@v4
+
+  #   - name: Extract metadata for the Docker image
+  #     id: meta
+  #     uses: docker/metadata-action@v3
+  #     with:
+  #       images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+  #   - name: Log in to GitHub container registry
+  #     uses: docker/login-action@v1.10.0
+  #     with:
+  #       registry: ${{ env.REGISTRY }}
+  #       username: ${{ github.actor }}
+  #       password: ${{ github.token }}
+
+  #   - name: Build and push container image to registry
+  #     uses: docker/build-push-action@v2
+  #     with:
+  #       push: ${{ github.event_name != 'pull_request' }}
+  #       tags: ${{ steps.meta.outputs.tags }}
+  #       file: ./src/pesctranscriptconverter-api/PescTranscriptConverter.Api/Dockerfile
