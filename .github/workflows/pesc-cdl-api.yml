@@ -25,7 +25,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}/pesc-cdl-api
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout Github Action'
@@ -46,7 +46,16 @@ jobs:
       run: dotnet build src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln --no-restore
 
     - name: 'Test'
-      run: dotnet test --logger GitHubActions src/pesctranscriptconverter-api/PescTranscriptConverter.Tests/PescTranscriptConverter.Tests.csproj --no-build --no-restore
+      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests/PescTranscriptConverter.Tests.csproj --no-build --no-restore
+
+  build_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@v4
+
+    - name: Build the Docker image
+      run: docker build src/pesctranscriptconverter-api/PescTranscriptConverter.Api --file Dockerfile
 
   # docker_publish:
   #   if: github.event_name != 'pull_request'
