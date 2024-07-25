@@ -43,10 +43,10 @@ jobs:
       run: dotnet restore src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln
 
     - name: 'Build'
-      run: dotnet build src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln
+      run: dotnet build src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln --no-restore
 
     - name: 'Test'
-      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests.csproj
+      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests/PescTranscriptConverter.Tests.csproj --no-build --no-restore
 
   # docker_publish:
   #   if: github.event_name != 'pull_request'
