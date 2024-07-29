@@ -46,7 +46,16 @@ jobs:
       run: dotnet build src/pesctranscriptconverter-api/PescTranscriptConverterApi.sln --no-restore
 
     - name: 'Test'
-      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests/PescTranscriptConverter.Tests.csproj --no-build --no-restore
+      run: dotnet test src/pesctranscriptconverter-api/PescTranscriptConverter.Tests/PescTranscriptConverter.Tests.csproj --no-build --no-restore --logger trx
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2.17.0
+      if: always()
+      with:
+        files: |
+          test-results/**/*.xml
+          test-results/**/*.trx
+          test-results/**/*.json
 
   build_docker_image:
     runs-on: ubuntu-latest
