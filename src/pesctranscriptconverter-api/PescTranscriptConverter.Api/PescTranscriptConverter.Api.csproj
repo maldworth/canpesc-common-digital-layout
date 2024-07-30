@@ -18,7 +18,7 @@
     <PackageReference Include="FluentStorage.Azure.Files" Version="5.2.2" />
     <PackageReference Include="FluentStorage.GCP" Version="5.2.2" />
     <PackageReference Include="Gotenberg.Sharp.API.Client" Version="2.3.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
   <ItemGroup>

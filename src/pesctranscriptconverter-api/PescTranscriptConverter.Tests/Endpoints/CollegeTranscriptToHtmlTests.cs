@@ -1,11 +1,11 @@
-using System.Net;
-using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PescTranscriptConverter.Tests.Endpoints;
 
 public class CollegeTranscriptToHtmlTests : IAsyncLifetime
 {
     private DistributedApplication? _app;
+    private ResourceNotificationService? _notificationService;
     private PescTranscriptConverterClient? _apiClient;
 
     public async Task InitializeAsync()
@@ -13,6 +13,7 @@ public class CollegeTranscriptToHtmlTests : IAsyncLifetime
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.PescTranscriptConverter_AppHost>();
 
         _app = await appHost.BuildAsync();
+        _notificationService = _app.Services.GetRequiredService<ResourceNotificationService>();
         await _app.StartAsync();
         _apiClient = new PescTranscriptConverterClient(_app.CreateHttpClient("api"));
     }
@@ -38,6 +39,8 @@ public class CollegeTranscriptToHtmlTests : IAsyncLifetime
             Pesc = SampleHelper.ReadResourceAsString(pescXml),
             Locale = locale
         };
+
+        await _notificationService.WaitForResourceAsync("api", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
 
         // Act
         var response = await _apiClient!.CollegeTranscriptToHtmlAsync(request);
