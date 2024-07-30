@@ -53,9 +53,9 @@ jobs:
       if: always()
       with:
         files: |
-          TestResults/**/*.xml
-          TestResults/**/*.trx
-          TestResults/**/*.json
+          src/**/TestResults/**/*.xml
+          src/**/TestResults/**/*.trx
+          src/**/TestResults/**/*.json
 
   build_docker_image:
     runs-on: ubuntu-latest
