@@ -1,6 +1,30 @@
 # PESC Transcript Common Digital Layout
 
-A toolkit to help users of the PESC transcript standards generate layouts (i.e. HTML, PDF) of transcripts they send/receive to facilitate an easy-to-read and easy-to-print layout.
+A developer friendly toolkit to help users of the PESC transcript standards generate layouts (i.e. HTML, PDF) of transcripts they send/receive to facilitate an easy-to-read and easy-to-print layout.
+
+
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Introduction](#introduction)
+  - [Goals](#goals)
+- [Getting Started](#getting-started)
+  - [API](#api)
+  - [CLI](#cli)
+- [Roadmap and Enhancements](#roadmap-and-enhancements)
+- [Contribute \& Feedback](#contribute--feedback)
+- [Contact Us](#contact-us)
+
+## Quick Start
+
+Open a terminal and run the following command:
+
+```
+docker run --rm -p 5440:8080 ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+```
+
+Then navigate to <http://localhost:5440/swagger> and try the html-to-pdf endpoints.
+
 
 ## Introduction
 
@@ -24,7 +48,7 @@ There are 2 solutions provided for rendering a PESC transcript to HTML or PDF
 
 ### API
 
-Uses docker containers to expose a simple HTTP server with 4 endpoints. 2 endpoints for high school and 2 for college transcripts. For more details on this tool see its [README](./src/pesctranscriptconverter-api/README.md).
+Uses docker containers to expose a simple HTTP server with 4 endpoints. 2 endpoints for high school and 2 for college transcripts.
 
 Pros:
 - uses docker containerization
@@ -34,6 +58,7 @@ Pros:
 Cons:
 - requires skills to host and run docker infrastructure (although made easier with cloud datacentre providers)
 
+Head to the [documentation](https://maldworth.github.io/canpesc-common-digital-layout/) to learn about all the features.
 
 ### CLI
 
