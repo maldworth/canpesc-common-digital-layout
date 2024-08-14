@@ -25,7 +25,7 @@ docker run --rm -p 4000:8080 ghcr.io/maldworth/canpesc-common-digital-layout/pes
 
 :::info
 
-The API will be available at [http://localhost:4000](http://localhost:4000).
+The API will be available at http://localhost:4000.
 
 :::
 
@@ -44,8 +44,8 @@ services:
 :::info
 
 
-The API will be accessible at [pesc-cdl-api:8080](http://pesc-cdl-api:8080) within your Docker Compose network.
-This means your other services can interact with PESC CDL API using [pesc-cdl-api:8080](http://pesc-cdl-api:8080).
+The API will be accessible at http://pesc-cdl-api:8080 within your Docker Compose network.
+This means your other services can interact with PESC CDL API using http://pesc-cdl-api:8080.
 
 :::
 
@@ -65,7 +65,7 @@ services:
 
 :::info
 
-The API will be available at [http://localhost:4000](http://localhost:4000).
+The API will be available at http://localhost:4000.
 
 :::
 
@@ -93,4 +93,4 @@ services:
       - "4000:8080"
 ```
 
-You might be wondering "where did those environment variables come from?", well head on over to the configuration section and learn about the different possible configurations available for PESC CDL API.
+You might be wondering "where did those environment variables come from?", well head on over to the [configuration](/docs/getting-started/configuration#pdf-conversion-to-pdf) section and learn about the different possible configurations available for PESC CDL API.

@@ -8,41 +8,57 @@ namespace PescTranscriptConverter.Api.HostedServices;
 
 internal sealed class XsltLoadWorker(
     IServiceProvider serviceProvider,
-    IOptions<CdlAssetsOptions> options,
+    IOptions<CdlAssetsOptions> cdlOptions,
+    IOptions<PdfAssetsOptions> pdfOptions,
     ILogger<XsltLoadWorker> logger) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = serviceProvider.CreateScope();
 
-        await TryFetchXsltFromStorage(scope, cancellationToken);
+        await CopyAssetsIfPresent(scope, "CdlStorage", cdlOptions.Value.RootDirectory, cancellationToken);
+        await CopyAssetsIfPresent(scope, "PdfStorage", pdfOptions.Value.RootDirectory, cancellationToken);
 
+        // Prime the XSLT transform singleton instances by resolving them first on startup
         scope.Resolve<XslCompiledTransform>("CollegeTranscript");
-
         scope.Resolve<XslCompiledTransform>("HighSchoolTranscript");
     }
 
-    private async Task TryFetchXsltFromStorage(IServiceScope scope, CancellationToken cancellationToken)
+    private async Task CopyAssetsIfPresent(IServiceScope scope, string keyedServiceName, string destinationAssetsDirectory, CancellationToken cancellationToken)
     {
-        var cdlStorage = scope.TryResolve<IBlobStorage>();
+        var blobStorage = ResolveKeyedBlobStorageAssets(scope, keyedServiceName);
 
-        if (cdlStorage is null)
+        if (blobStorage is not null)
         {
-            logger.LogWarning("Blob storage connection string was not set. XSLT Defaults will be used.");
-            return;
+            await CopyBlobFilesToDestinationAssets(blobStorage, destinationAssetsDirectory, cancellationToken);
+        }
+    }
+
+    private IBlobStorage? ResolveKeyedBlobStorageAssets(IServiceScope scope, string keyedServiceName)
+    {
+        var storage = scope.TryResolve<IBlobStorage>(keyedServiceName);
+
+        if (storage is null)
+        {
+            logger.LogWarning($"Blob storage connection string was not set for {keyedServiceName}. Defaults will be used.");
         }
 
-        var blobs = await cdlStorage.ListAsync(recurse: true, cancellationToken: cancellationToken);
+        return storage;
+    }
+
+    private async Task CopyBlobFilesToDestinationAssets(IBlobStorage blobStorage, string destinationAssetsDirectory, CancellationToken cancellationToken)
+    {
+        var blobs = await blobStorage.ListAsync(recurse: true, cancellationToken: cancellationToken);
         foreach (var blob in blobs)
         {
-            var blobPath = $"{options.Value.RootDirectory}{blob.FullPath}";
+            var blobPath = $"{destinationAssetsDirectory.TrimEnd('/', '\\')}{blob.FullPath}"; // blob FullPath already has a leading slash, so we trim all the destination directory slashes
             if (blob.IsFolder)
             {
                 Directory.CreateDirectory(blobPath);
             }
             else if (blob.IsFile)
             {
-                await cdlStorage.ReadToFileAsync(blob.FullPath, blobPath, cancellationToken);
+                await blobStorage.ReadToFileAsync(blob.FullPath, blobPath, cancellationToken);
             }
         }
     }
