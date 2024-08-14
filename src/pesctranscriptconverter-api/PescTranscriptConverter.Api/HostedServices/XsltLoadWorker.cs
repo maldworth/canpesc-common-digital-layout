@@ -24,25 +24,25 @@ internal sealed class XsltLoadWorker(
 
     private async Task TryFetchXsltFromStorage(IServiceScope scope, CancellationToken cancellationToken)
     {
-        var blobStorage = scope.TryResolve<IBlobStorage>();
+        var cdlStorage = scope.TryResolve<IBlobStorage>();
 
-        if (blobStorage is null)
+        if (cdlStorage is null)
         {
             logger.LogWarning("Blob storage connection string was not set. XSLT Defaults will be used.");
             return;
         }
 
-        var blobs = await blobStorage.ListAsync(recurse: true, cancellationToken: cancellationToken);
+        var blobs = await cdlStorage.ListAsync(recurse: true, cancellationToken: cancellationToken);
         foreach (var blob in blobs)
         {
-            var blobPath = Path.Combine(options.Value.RootDirectory, blob.FullPath);
+            var blobPath = $"{options.Value.RootDirectory}{blob.FullPath}";
             if (blob.IsFolder)
             {
                 Directory.CreateDirectory(blobPath);
             }
             else if (blob.IsFile)
             {
-                await blobStorage.ReadToFileAsync(blob.FullPath, blobPath, cancellationToken);
+                await cdlStorage.ReadToFileAsync(blob.FullPath, blobPath, cancellationToken);
             }
         }
     }

@@ -14,7 +14,7 @@ public static partial class ProgramExtensions
 {
     public static void AddCustomFluentStorage(this WebApplicationBuilder builder)
     {
-        var blobConnectionString = builder.Configuration.GetConnectionString("blobstorage");
+        var blobConnectionString = builder.Configuration.GetConnectionString("cdlStorage");
 
         if (string.IsNullOrWhiteSpace(blobConnectionString))
         {

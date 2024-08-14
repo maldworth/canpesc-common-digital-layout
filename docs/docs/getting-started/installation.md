@@ -73,7 +73,9 @@ The API will be available at [http://localhost:4000](http://localhost:4000).
 
 ### PDF Support
 
-Todo
+PDF Configuration is optional and uses the open source (MIT licenced) [Gotenberg](https://gotenberg.dev/). You are always welcome to take the html output and
+leverage your own html-to-pdf infrastructure if you already have it, but with a quick update to the docker-compose seen below, you can get a powerful pdf conversion
+engine with gotenberg. Please [read their documentation](https://gotenberg.dev/docs/getting-started/introduction) if you want to learn more about it and customize it.
 
 ```yaml title="docker-compose.yml"
 services:
@@ -90,3 +92,5 @@ services:
     ports:
       - "4000:8080"
 ```
+
+You might be wondering "where did those environment variables come from?", well head on over to the configuration section and learn about the different possible configurations available for PESC CDL API.
