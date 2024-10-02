@@ -20,7 +20,7 @@ network.
 To start a default Docker container of pesc-cdl-api, run:
 
 ```
-docker run --rm -p 4000:8080 ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+docker run --rm -p 4000:8080 ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
 ```
 
 :::info
@@ -38,7 +38,7 @@ services:
   # Your other services.
 
   pesc-cdl-api:
-    image: ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+    image: ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
 ```
 
 :::info
@@ -58,7 +58,7 @@ services:
   # Your other services.
 
   pesc-cdl-api:
-    image: ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+    image: ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
     ports:
       - "4000:8080"
 ```
@@ -85,7 +85,7 @@ services:
     image: gotenberg/gotenberg:8
 
   pesc-cdl-api:
-    image: ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+    image: ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
     environment:
       - GotenbergSharpClient__ServiceUrl=http://gotenberg:3000
       - GotenbergSharpClient__HealthCheckUrl=http://gotenberg:3000/health

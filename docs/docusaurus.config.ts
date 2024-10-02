@@ -8,14 +8,14 @@ const config: Config = {
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
-    url: 'https://maldworth.github.io/',
+    url: 'https://pesc-org.github.io/',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/canpesc-common-digital-layout/',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'maldworth', // Usually your GitHub org/user name.
+    organizationName: 'pesc-org', // Usually your GitHub org/user name.
     projectName: 'canpesc-common-digital-layout', // Usually your repo name.
     trailingSlash: false,
     onBrokenLinks: 'throw',

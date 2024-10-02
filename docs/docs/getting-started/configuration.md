@@ -17,7 +17,7 @@ CDL (Common Digital Layout) is an agreed upon style for displaying PESC xml as a
 PESC XML and transforming it into an html document. This docker service provides the extensibility to fully customize the transform and html
 styles.
 
-Feel free to review the default [CDL assets directory](https://github.com/maldworth/canpesc-common-digital-layout/tree/main/assets/cdl), which
+Feel free to review the default [CDL assets directory](https://github.com/pesc-org/canpesc-common-digital-layout/tree/main/assets/cdl), which
 is copied verbatim into the docker image. Those assets provide all the logic to transform, layout and styling for the html output.
 
 The following section lets you configure an additional directory where you can place any files in to override the default CDL assets.
@@ -77,7 +77,7 @@ services:
     image: gotenberg/gotenberg:8
 
   pesc-cdl-api:
-    image: ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+    image: ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
     environment:
       - GotenbergSharpClient__ServiceUrl=http://gotenberg:3000
       - GotenbergSharpClient__HealthCheckUrl=http://gotenberg:3000/health
@@ -101,7 +101,7 @@ Then you should be able to navigate to http://localhost:4000, Test the html or p
 Very similar to the CDL assets, PDF output has some assets that are specific to generating the pdf document. They can be overridden through
 the technique outlined in this section.
 
-Feel free to review the default [PDF assets directory](https://github.com/maldworth/canpesc-common-digital-layout/tree/main/assets/pdf), which
+Feel free to review the default [PDF assets directory](https://github.com/pesc-org/canpesc-common-digital-layout/tree/main/assets/pdf), which
 is copied verbatim into the docker image. As of writing this, the assets are 2 files `header.html` and `footer.html`
 
 The following section lets you configure an additional directory where you can place any files in to override the default CDL assets.
@@ -189,7 +189,7 @@ services:
     image: gotenberg/gotenberg:8
 
   pesc-cdl-api:
-    image: ghcr.io/maldworth/canpesc-common-digital-layout/pesc-cdl-api:latest
+    image: ghcr.io/pesc-org/canpesc-common-digital-layout/pesc-cdl-api:latest
     environment:
       - GotenbergSharpClient__ServiceUrl=http://gotenberg:3000
       - GotenbergSharpClient__HealthCheckUrl=http://gotenberg:3000/health
